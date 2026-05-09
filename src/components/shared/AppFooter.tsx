@@ -33,14 +33,14 @@ export const AppFooter = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [activeContent, setActiveContent] = useState<FooterIconType | null>(null)
   const controls = useAnimation()
-  const { refreshUsers } = useDashboard()
+  const { refreshUsers, currentView, setCurrentView } = useDashboard()
 
   const handleIconClick = (type: FooterIconType) => {
     setActiveContent(type)
     onOpen()
   }
 
-  const handleRefreshClick = async () => {
+  const handleToggleView = async () => {
     // 360 Rotation Animation
     await controls.start({
       rotate: 360,
@@ -49,7 +49,10 @@ export const AppFooter = () => {
     // Reset rotation for next click without animation
     controls.set({ rotate: 0 })
     
-    // Trigger user refresh in SearchSection
+    // Toggle View
+    setCurrentView(currentView === 'dashboard' ? 'matches' : 'dashboard')
+    
+    // Trigger user refresh
     refreshUsers()
   }
 
@@ -152,10 +155,9 @@ export const AppFooter = () => {
         as="footer"
         position="fixed"
         bottom={0}
-        left="50%"
-        transform="translateX(-50%)"
+        left={0}
+        right={0}
         w="full"
-        maxW="432px"
         zIndex={10}
         h="140px"
         display="flex"
@@ -171,13 +173,19 @@ export const AppFooter = () => {
           h="180px"
           zIndex={-1}
           bgImage="url('/images/footer-bg.png')"
-          bgSize="contain"
+          bgSize="100% 100%"
           bgRepeat="no-repeat"
-          bgPosition="bottom center"
+          bgPosition="bottom"
         />
 
         <HStack w="full" px={6} justify="space-between" align="center" position="relative">
-          <Flex w="51px" h="51px" bg="mint.active" rounded="full" align="center" justify="center">
+          <Flex 
+            w="51px" h="51px" 
+            bg={currentView === 'dashboard' ? 'mint.active' : 'transparent'} 
+            rounded="full" align="center" justify="center"
+            cursor="pointer"
+            onClick={() => setCurrentView('dashboard')}
+          >
             <Image src="/icons/footer-icon-1.svg" alt="" w="37px" h="37px" />
           </Flex>
 
@@ -193,12 +201,12 @@ export const AppFooter = () => {
             <Image src="/icons/footer-icon-2.svg" alt="" w="37px" h="37px" />
           </Flex>
 
-          <Box position="relative" mt="-60px">
+          <Box position="relative" mt="-60px" right="2px">
             <MotionBox
               animate={controls}
               w="82px"
               h="82px"
-              bg="white"
+              bg={currentView === 'matches' ? 'mint.active' : 'white'}
               rounded="full"
               display="flex"
               alignItems="center"
@@ -208,7 +216,7 @@ export const AppFooter = () => {
               border="4px solid transparent"
               _hover={{ transform: 'scale(1.05)' }}
               transition={{ duration: 0.2 }}
-              onClick={handleRefreshClick}
+              onClick={handleToggleView}
             >
               <Image src="/icons/footer-icon-3.svg" alt="" w="43px" h="43px" />
             </MotionBox>
