@@ -13,3 +13,5 @@ export function ChakraProvider({ children }: { children: React.ReactNode }) {
     </CacheProvider>
   )
 }
+
+ChakraProvider.displayName = 'ChakraProvider'

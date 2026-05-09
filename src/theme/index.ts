@@ -1,33 +1,19 @@
 import { extendTheme, type ThemeConfig } from '@chakra-ui/react'
+import { colors, semanticTokens } from './foundations/colors'
+import { typography } from './foundations/typography'
+import { spacing } from './spacing'
 
 const config: ThemeConfig = {
   initialColorMode: 'light',
   useSystemColorMode: true,
 }
 
-const colors = {
-  brand: {
-    50: '#e3f2fd',
-    100: '#bbdefb',
-    200: '#90caf9',
-    300: '#64b5f6',
-    400: '#42a5f5',
-    500: '#2196f3',
-    600: '#1e88e5',
-    700: '#1976d2',
-    800: '#1565c0',
-    900: '#0d47a1',
-  },
-}
-
 const theme = extendTheme({
   config,
   colors,
-  fonts: {
-    heading: 'var(--font-geist-sans), sans-serif',
-    body: 'var(--font-geist-sans), sans-serif',
-    mono: 'var(--font-geist-mono), monospace',
-  },
+  semanticTokens,
+  ...typography,
+  ...spacing,
   components: {
     Button: {
       baseStyle: {
@@ -38,3 +24,4 @@ const theme = extendTheme({
 })
 
 export default theme
+export type Theme = typeof theme

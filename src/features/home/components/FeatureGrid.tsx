@@ -39,3 +39,6 @@ export const FeatureGrid = () => {
     </Flex>
   )
 }
+
+FeatureIcon.displayName = 'FeatureIcon'
+FeatureGrid.displayName = 'FeatureGrid'
