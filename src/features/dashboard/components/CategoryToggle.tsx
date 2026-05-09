@@ -20,6 +20,8 @@ export const CategoryToggle = ({ category, setCategory }: CategoryToggleProps) =
       shadow="md"
       border="1px solid"
       borderColor="gray.100"
+      mt={3}
+      mb={4}
     >
       {categories.map((cat) => (
         <Box

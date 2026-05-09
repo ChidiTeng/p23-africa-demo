@@ -18,14 +18,13 @@ import { RiListSettingsFill } from 'react-icons/ri'
 import { MOCK_USERS } from '../data/mockUsers'
 
 const UserCard = ({ user, image }: { user: any; image: string }) => (
-  <Box w="full" py={4}>
+  <Box w="full" py={0}>
     <HStack spacing={4} align="start">
       <Box
         w="83px"
         h="66px"
-        rounded="2xl"
+        rounded="2xl 0 0 2xl"
         overflow="hidden"
-        bg="purple.200"
       >
         <Image src={image} alt={user.name} w="full" h="full" objectFit="cover" />
       </Box>
@@ -60,7 +59,7 @@ const UserCard = ({ user, image }: { user: any; image: string }) => (
             </Text>
           </VStack>
 
-          <VStack align="end" spacing={0}>
+          <VStack align="start" spacing={0}>
             <Text color="mint.active" fontSize="8px" fontWeight="500">
               Industry
             </Text>
