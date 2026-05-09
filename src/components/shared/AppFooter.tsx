@@ -207,7 +207,7 @@ export const AppFooter = () => {
               cursor="pointer"
               border="4px solid transparent"
               _hover={{ transform: 'scale(1.05)' }}
-              transition="all 0.2s"
+              transition={{ duration: 0.2 }}
               onClick={handleRefreshClick}
             >
               <Image src="/icons/footer-icon-3.svg" alt="" w="43px" h="43px" />
