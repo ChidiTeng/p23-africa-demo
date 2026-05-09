@@ -20,12 +20,12 @@ export const DashboardHeader = () => {
       maxW="432px"
       mx="auto"
       bg="dark.900"
-      rounded="2xl"
+      rounded="lg"
       display="flex"
       alignItems="center"
       px="32px"
       overflow="hidden"
-      shadow="lg"
+      border="none"
     >
       {/* Left Semi-circle Cut-out */}
       <Box
@@ -33,8 +33,8 @@ export const DashboardHeader = () => {
         left="-15px"
         top="50%"
         transform="translateY(-50%)"
-        w="30px"
-        h="30px"
+        w="35px"
+        h="43px"
         bg={pageBg}
         rounded="full"
       />
@@ -45,8 +45,8 @@ export const DashboardHeader = () => {
         right="-15px"
         top="50%"
         transform="translateY(-50%)"
-        w="30px"
-        h="30px"
+        w="35px"
+        h="43px"
         bg={pageBg}
         rounded="full"
       />

@@ -82,15 +82,26 @@ const MotionVStack = motion(VStack)
 
 export const SearchSection = () => {
   const { refreshTrigger } = useDashboard()
+  const [searchQuery, setSearchQuery] = useState('')
   const [currentUsers, setCurrentUsers] = useState([MOCK_USERS[0], MOCK_USERS[1]])
 
+  // Handle Refresh Trigger from Footer
   useEffect(() => {
     if (refreshTrigger > 0) {
-      // Logic to pick 2 random different users
       const shuffled = [...MOCK_USERS].sort(() => 0.5 - Math.random())
       setCurrentUsers([shuffled[0], shuffled[1]])
+      setSearchQuery('') // Reset search on global refresh
     }
   }, [refreshTrigger])
+
+  // Functional Search Logic
+  const filteredUsers = searchQuery.trim() === '' 
+    ? currentUsers 
+    : MOCK_USERS.filter(user => 
+        user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.industry.toLowerCase().includes(searchQuery.toLowerCase())
+      ).slice(0, 2) // Maintain layout with 2 users
 
   return (
     <Box
@@ -121,6 +132,8 @@ export const SearchSection = () => {
             border="none"
             rounded="full"
             placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             _placeholder={{ color: 'cream.500', opacity: 0.5 }}
             color="white"
             pl={4}
@@ -134,19 +147,31 @@ export const SearchSection = () => {
       </HStack>
 
       {/* User Cards with Animation */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="popLayout">
         <MotionVStack
-          key={refreshTrigger}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.3 }}
+          key={searchQuery || refreshTrigger}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
           spacing={0}
           align="stretch"
+          minH="150px"
         >
-          <UserCard user={currentUsers[0]} image={`/images/client-${(refreshTrigger % 2) + 1}.png`} />
-          <Divider borderColor="rgba(243, 240, 233, 0.1)" my={2} />
-          <UserCard user={currentUsers[1]} image={`/images/client-${((refreshTrigger + 1) % 2) + 1}.png`} />
+          {filteredUsers.length > 0 ? (
+            filteredUsers.map((user, idx) => (
+              <Box key={user.id}>
+                <UserCard user={user} image={`/images/client-${(idx % 2) + 1}.png`} />
+                {idx < filteredUsers.length - 1 && (
+                  <Divider borderColor="rgba(243, 240, 233, 0.1)" my={2} />
+                )}
+              </Box>
+            ))
+          ) : (
+            <Flex h="100px" align="center" justify="center" direction="column">
+              <Text color="cream.500" opacity={0.6} fontSize="sm">No leads found</Text>
+            </Flex>
+          )}
         </MotionVStack>
       </AnimatePresence>
     </Box>

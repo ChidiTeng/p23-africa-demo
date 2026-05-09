@@ -5,10 +5,10 @@ import { DashboardHeader, NetworkStats, ChartSection, SearchSection } from '@/fe
 
 export default function Home() {
   return (
-    <Box minH="100vh" bg="gray.50" py={10} pb={40}>
+    <Box minH="100vh" bg="gray.50" pt={2} pb={40}>
       <Container maxW="container.sm" px={4}>
-        <VStack spacing={10} align="stretch">
-          <DashboardHeader />
+        <VStack spacing={6} align="stretch">
+      <DashboardHeader />
           <NetworkStats />
           <ChartSection />
           <SearchSection />

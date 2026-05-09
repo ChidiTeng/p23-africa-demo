@@ -17,6 +17,9 @@ import {
 import { FaChevronDown } from 'react-icons/fa'
 import { MOCK_API_RESPONSE, Category, Timeframe } from '../data/mockChartData'
 
+import { ChartBackground } from './ChartBackground'
+import { CategoryToggle } from './CategoryToggle'
+
 const Y_LABELS = ['100%', '75%', '50%', '25%']
 
 export const ChartSection = () => {
@@ -30,72 +33,10 @@ export const ChartSection = () => {
     <VStack spacing={6} w="full" align="stretch">
       <Box position="relative" w="full" h="241px">
         {/* Background SVG */}
-        <Box position="absolute" inset={0} zIndex={0}>
-          <svg
-            width="100%"
-            height="100%"
-            viewBox="0 0 399 241"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            preserveAspectRatio="none"
-          >
-            <g filter="url(#filter0_d_8055_5183)">
-              <path
-                d="M399 221V18.4617C399 8.26559 390.734 0 380.538 0H108.126C97.0803 0 88.126 8.9543 88.126 20V21.913C88.126 32.9587 79.1717 41.913 68.126 41.913H20C8.95428 41.913 -3.05176e-05 50.8674 -3.05176e-05 61.913V221C-3.05176e-05 232.046 8.95428 241 20 241H379C390.046 241 399 232.046 399 221Z"
-                fill="#C1DAD7"
-              />
-              <path
-                d="M399 221V18.4617C399 8.26559 390.734 0 380.538 0H108.126C97.0803 0 88.126 8.9543 88.126 20V21.913C88.126 32.9587 79.1717 41.913 68.126 41.913H20C8.95428 41.913 -3.05176e-05 50.8674 -3.05176e-05 61.913V221C-3.05176e-05 232.046 8.95428 241 20 241H379C390.046 241 399 232.046 399 221Z"
-                stroke="#C1DAD7"
-              />
-            </g>
-            <defs>
-              <filter
-                id="filter0_d_8055_5183"
-                x="-4.5"
-                y="-3.5"
-                width="408"
-                height="250"
-                filterUnits="userSpaceOnUse"
-                colorInterpolationFilters="sRGB"
-              >
-                <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feColorMatrix
-                  in="SourceAlpha"
-                  type="matrix"
-                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                  result="hardAlpha"
-                />
-                <feMorphology
-                  radius="2"
-                  operator="dilate"
-                  in="SourceAlpha"
-                  result="effect1_dropShadow_8055_5183"
-                />
-                <feOffset dy="1" />
-                <feGaussianBlur stdDeviation="1" />
-                <feColorMatrix
-                  type="matrix"
-                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"
-                />
-                <feBlend
-                  mode="normal"
-                  in2="BackgroundImageFix"
-                  result="effect1_dropShadow_8055_5183"
-                />
-                <feBlend
-                  mode="normal"
-                  in="SourceGraphic"
-                  in2="effect1_dropShadow_8055_5183"
-                  result="shape"
-                />
-              </filter>
-            </defs>
-          </svg>
-        </Box>
+        <ChartBackground />
 
-        {/* Content Overlay */}
-        <Box position="relative" zIndex={1} h="full" w="full" px={6} py={4}>
+        <Box position="relative" zIndex={1} h="full" w="full" px={2} py={4}>
+         
           {/* Top Row: Navigation Pills */}
           <HStack spacing={4} mb={6}>
             <Menu placement="bottom-start" offset={[12, 10]}>
@@ -170,11 +111,12 @@ export const ChartSection = () => {
           </HStack>
 
           {/* Chart Area */}
-          <Flex h="140px" align="stretch" position="relative">
+          <Flex h="170px" align="stretch" position="relative">
             {/* Grid Lines */}
             <VStack
               position="absolute"
               inset={0}
+              bottom="20px" // Align with the bottom of the bars (above labels)
               justify="space-between"
               align="stretch"
               zIndex={0}
@@ -184,8 +126,18 @@ export const ChartSection = () => {
               {Y_LABELS.map((_) => (
                 <Box key={_} borderTop="1px dashed" borderColor="rgba(14, 3, 25, 0.1)" w="full" />
               ))}
-              <Box borderTop="2px solid" borderColor="dark.900" w="full" />
             </VStack>
+
+            {/* Baseline */}
+            <Box
+              position="absolute"
+              bottom="20px"
+              left="35px"
+              right={0}
+              borderTop="2px solid"
+              borderColor="dark.900"
+              zIndex={2}
+            />
 
             {/* Y-Axis Labels */}
             <VStack
@@ -207,7 +159,7 @@ export const ChartSection = () => {
                   {label}
                 </Text>
               ))}
-              <Box h="1px" />
+              <Box h="12px" />
             </VStack>
 
             {/* Bars Container */}
@@ -231,7 +183,7 @@ export const ChartSection = () => {
                         h="85%"
                         bg="rgba(14, 3, 25, 0.1)"
                         roundedTop="full"
-                        roundedBottom="full"
+                        roundedBottom="none"
                       />
                       <Box
                         position="relative"
@@ -239,7 +191,7 @@ export const ChartSection = () => {
                         h={`${heightPercent}%`}
                         bg="dark.900"
                         roundedTop="full"
-                        roundedBottom="full"
+                        roundedBottom="none"
                         transition="height 0.8s cubic-bezier(0.4, 0, 0.2, 1)"
                         display="flex"
                         alignItems="start"
@@ -268,39 +220,7 @@ export const ChartSection = () => {
       </Box>
 
       {/* Toggle Pills */}
-      <HStack
-        bg="white"
-        rounded="full"
-        p={1}
-        spacing={0}
-        shadow="md"
-        border="1px solid"
-        borderColor="gray.100"
-      >
-        {(['Directory', 'Smart matches', 'Active Leads'] as Category[]).map((cat) => (
-          <Box
-            key={cat}
-            flex={1}
-            py={3}
-            px={4}
-            rounded="full"
-            bg={category === cat ? 'purple.active' : 'transparent'}
-            cursor="pointer"
-            transition="all 0.3s"
-            onClick={() => setCategory(cat)}
-            textAlign="center"
-          >
-            <Text
-              fontSize="12px"
-              fontWeight={category === cat ? '700' : '400'}
-              color={category === cat ? '#262A27' : '#000000'}
-              lineHeight="100%"
-            >
-              {cat}
-            </Text>
-          </Box>
-        ))}
-      </HStack>
+      <CategoryToggle category={category} setCategory={setCategory} />
     </VStack>
   )
 }

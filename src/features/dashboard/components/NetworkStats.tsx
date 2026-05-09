@@ -14,13 +14,14 @@ import {
 
 export const NetworkStats = () => {
   return (
-    <VStack align="start" w="full">
+    <VStack align="start" w="full" spacing={0}>
       <Text
         color="dark.900"
         fontSize="xs-sub"
         fontWeight="600"
         fontFamily="heading"
         lineHeight="17px"
+        paddingLeft={3}
         textTransform="capitalize"
       >
         Network Stats
@@ -37,12 +38,12 @@ export const NetworkStats = () => {
           borderColor="dark.900"
           rounded="full"
           py="6px"
-          px="30px"
+          px="20px"
           spacing={6}
-          justify="center"
+          justify="space-around"
         >
           {/* Leads */}
-          <HStack spacing={2}>
+          <HStack spacing={3}>
             <Image src="/icons/share-knowledge.png" alt="" w="24px" h="24px" />
             <VStack align="start" spacing={0}>
               <Text
@@ -60,7 +61,7 @@ export const NetworkStats = () => {
           </HStack>
 
           {/* Connections */}
-          <HStack spacing={2}>
+          <HStack spacing={3}>
             <Image src="/icons/unlink-01.png" alt="" w="24px" h="24px" />
             <VStack align="start" spacing={0}>
               <Text
@@ -90,7 +91,7 @@ export const NetworkStats = () => {
               fontSize="2xs"
               color="dark.900"
               fontWeight="400"
-              lineHeight="25.56px"
+              // lineHeight="25.56px"
             >
               200k+ People
             </Text>
@@ -107,6 +108,7 @@ export const NetworkStats = () => {
             _hover={{ opacity: 0.9 }}
             px="10px"
             py="8px"
+            mt={2}
           >
             Active Members
           </Button>
