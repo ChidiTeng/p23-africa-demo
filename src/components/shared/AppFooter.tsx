@@ -201,7 +201,7 @@ export const AppFooter = () => {
             <Image src="/icons/footer-icon-2.svg" alt="" w="37px" h="37px" />
           </Flex>
 
-          <Box position="relative" mt="-60px">
+          <Box position="relative" mt="-60px" right="2px">
             <MotionBox
               animate={controls}
               w="82px"

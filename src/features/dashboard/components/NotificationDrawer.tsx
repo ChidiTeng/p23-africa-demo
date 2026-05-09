@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import {
   Box,
   VStack,
@@ -20,11 +19,12 @@ import {
 import { MOCK_NOTIFICATIONS } from '../data/mockNotifications'
 import { NotificationCard } from './NotificationCard'
 import { NotificationDetailView } from './NotificationDetailView'
+import { motion, AnimatePresence, Variants } from 'framer-motion'
 
 const MotionVStack = motion(VStack)
 const MotionBox = motion(Box)
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -35,7 +35,7 @@ const containerVariants = {
   },
 }
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20, scale: 0.9 },
   visible: { 
     opacity: 1, 

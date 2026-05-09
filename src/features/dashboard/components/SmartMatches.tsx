@@ -13,9 +13,10 @@ import {
   InputRightElement,
   IconButton,
 } from '@chakra-ui/react'
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion'
-import { useState } from 'react'
+import { motion, AnimatePresence, useMotionValue, useTransform, useAnimation } from 'framer-motion'
+import { useState, useEffect } from 'react'
 import { MOCK_USERS } from '../data/mockUsers'
+import confetti from 'canvas-confetti'
 
 const MotionBox = motion(Box)
 
@@ -23,23 +24,46 @@ interface MatchCardProps {
   user: any
   isTop: boolean
   onSwipe: (direction: 'left' | 'right') => void
+  isCelebrating?: boolean
 }
 
-const MatchCard = ({ user, isTop, onSwipe }: MatchCardProps) => {
+const MatchCard = ({ user, isTop, onSwipe, isCelebrating }: MatchCardProps) => {
   const x = useMotionValue(0)
   const rotate = useTransform(x, [-200, 200], [-60, 60])
+  const controls = useAnimation()
+  const [exitX, setExitX] = useState(0)
+
+  useEffect(() => {
+    if (isCelebrating && isTop) {
+      const celebrate = async () => {
+        await controls.start({
+          scale: 1.1,
+          rotate: [0, -5, 5, -5, 5, 0],
+          transition: { duration: 0.8, ease: "easeInOut" }
+        })
+        controls.set({ scale: 1, rotate: 0 })
+      }
+      celebrate()
+    }
+  }, [isCelebrating, isTop, controls])
 
   return (
     <MotionBox
       position="absolute"
       w="330px"
       h="480px"
-      style={{ x, rotate: isTop ? rotate : (isTop === false ? -3 : 0) }}
-      drag={isTop ? 'x' : false}
+      style={{ x, rotate: isTop ? (isCelebrating ? undefined : rotate) : (isTop === false ? -3 : 0) }}
+      animate={controls}
+      drag={isTop && !isCelebrating ? 'x' : false}
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={(_, info) => {
-        if (info.offset.x > 100) onSwipe('right')
-        else if (info.offset.x < -100) onSwipe('left')
+        if (info.offset.x > 100) {
+          setExitX(500)
+          onSwipe('right')
+        } else if (info.offset.x < -100) {
+          setExitX(-500)
+          onSwipe('left')
+        }
       }}
       initial={{ 
         scale: isTop ? 1 : 0.92, 
@@ -53,7 +77,7 @@ const MatchCard = ({ user, isTop, onSwipe }: MatchCardProps) => {
         y: isTop ? 0 : 20,
         rotate: isTop ? 0 : (isTop === false ? -3 : 0) 
       }}
-      exit={{ x: 500, opacity: 0, rotate: 60 }}
+      exit={{ x: exitX, opacity: 0, rotate: exitX > 0 ? 60 : -60 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       cursor={isTop ? 'grab' : 'default'}
       _active={{ cursor: isTop ? 'grabbing' : 'default' }}
@@ -122,6 +146,7 @@ const WAVY_PATTERN = `url("data:image/svg+xml,%3Csvg width='100' height='20' vie
 
 export const SmartMatches = () => {
   const [index, setIndex] = useState(0)
+  const [isCelebrating, setIsCelebrating] = useState(false)
   const users = [
     { id: 'jamal', name: 'Jamal Agoro', title: 'CTO AfriLaw', image: '/images/jamal-agoro-image.png' },
     ...MOCK_USERS.map(u => ({ id: u.id, name: u.name, title: u.title, image: u.avatar }))
@@ -129,6 +154,30 @@ export const SmartMatches = () => {
 
   const handleSwipe = () => {
     setIndex(prev => (prev + 1) % users.length)
+  }
+
+  const handleMatch = () => {
+    setIsCelebrating(true)
+    
+    // Left burst
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { x: 0.1, y: 0.5 },
+      colors: ['#193E47', '#CCFF00', '#FFFFFF', '#6C5CE7']
+    })
+    
+    // Right burst
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { x: 0.9, y: 0.5 },
+      colors: ['#193E47', '#CCFF00', '#FFFFFF', '#6C5CE7']
+    })
+
+    setTimeout(() => {
+      setIsCelebrating(false)
+    }, 1000)
   }
 
   return (
@@ -189,6 +238,7 @@ export const SmartMatches = () => {
             user={users[index]} 
             isTop={true} 
             onSwipe={handleSwipe} 
+            isCelebrating={isCelebrating}
           />
           {index + 1 < users.length && (
             <MatchCard 
@@ -201,10 +251,9 @@ export const SmartMatches = () => {
         </AnimatePresence>
       </Flex>
 
-      {/* Action Buttons Below Card */}
       <HStack 
         position="absolute" 
-        bottom="140px" 
+        bottom="20%" 
         w="full" 
         justify="center" 
         spacing={4} 
@@ -236,6 +285,7 @@ export const SmartMatches = () => {
           _hover={{ opacity: 0.9, transform: 'scale(1.05)' }}
           transition="all 0.2s"
           shadow="lg"
+          onClick={handleMatch}
         >
           Match Us!
         </Button>
