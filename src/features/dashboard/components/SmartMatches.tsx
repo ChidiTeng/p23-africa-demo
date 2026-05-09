@@ -41,9 +41,22 @@ const MatchCard = ({ user, isTop, onSwipe, isCelebrating }: MatchCardProps) => {
           rotate: [0, -5, 5, -5, 5, 0],
           transition: { duration: 0.8, ease: "easeInOut" }
         })
-        controls.set({ scale: 1, rotate: 0 })
+        controls.set({ 
+          scale: 1, 
+          rotate: 0,
+          y: 0,
+          opacity: 1
+        })
       }
       celebrate()
+    } else {
+      controls.start({
+        scale: isTop ? 1 : 0.92,
+        opacity: 1,
+        y: isTop ? 0 : 20,
+        rotate: isTop ? 0 : -3,
+        transition: { type: 'spring', stiffness: 300, damping: 30 }
+      })
     }
   }, [isCelebrating, isTop, controls])
 
@@ -70,12 +83,6 @@ const MatchCard = ({ user, isTop, onSwipe, isCelebrating }: MatchCardProps) => {
         opacity: 0, 
         y: isTop ? 0 : 20,
         rotate: isTop ? 0 : -5 
-      }}
-      animate={{ 
-        scale: isTop ? 1 : 0.92, 
-        opacity: 1, 
-        y: isTop ? 0 : 20,
-        rotate: isTop ? 0 : (isTop === false ? -3 : 0) 
       }}
       exit={{ x: exitX, opacity: 0, rotate: exitX > 0 ? 60 : -60 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
