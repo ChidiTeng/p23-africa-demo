@@ -26,7 +26,7 @@ export const CategoryToggle = ({ category, setCategory }: CategoryToggleProps) =
           key={cat}
           flex={1}
           py={3}
-          px={4}
+          px={2}
           rounded="full"
           bg={category === cat ? 'purple.active' : 'transparent'}
           cursor="pointer"

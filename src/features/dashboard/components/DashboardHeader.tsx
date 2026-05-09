@@ -7,10 +7,13 @@ import {
   VStack,
   HStack,
   useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react'
+import { NotificationDrawer } from './NotificationDrawer'
 
 export const DashboardHeader = () => {
   const pageBg = useColorModeValue('gray.50', 'gray.900')
+  const { isOpen, onOpen, onClose } = useDisclosure()
   
   return (
     <Box
@@ -51,11 +54,11 @@ export const DashboardHeader = () => {
         rounded="full"
       />
 
-      <HStack w="full" justify="space-between" align="center">
+      <HStack w="full" justify="space-between" align="center" zIndex={1}>
         <VStack align="start" spacing={0}>
           <Text
             color="cream.500"
-            fontSize="24px"
+            fontSize="18px"
             fontWeight="800"
             lineHeight="120%"
             fontFamily="heading"
@@ -74,7 +77,7 @@ export const DashboardHeader = () => {
         </VStack>
 
         <HStack spacing={4}>
-          <Box as="button" _hover={{ opacity: 0.8 }}>
+          <Box as="button" onClick={onOpen} _hover={{ opacity: 0.8 }}>
             <svg
               width="21"
               height="21"
@@ -119,6 +122,8 @@ export const DashboardHeader = () => {
           />
         </HStack>
       </HStack>
+
+      <NotificationDrawer isOpen={isOpen} onClose={onClose} />
     </Box>
   )
 }
